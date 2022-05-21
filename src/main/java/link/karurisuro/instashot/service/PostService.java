@@ -11,9 +11,9 @@ public interface PostService {
 
     Post getSinglePost(Long id) throws CustomDataNotFoundException;
 
-    Long savePost(Post post);
+    Long savePost(Post post, Long userId) throws CustomErrorException;
 
-    Long updatePost(Post post) throws CustomDataNotFoundException;
+    Long updatePost(Post post, Long userId) throws CustomDataNotFoundException, CustomErrorException;
 
     void deletePost(Long postID) throws CustomDataNotFoundException;
 }

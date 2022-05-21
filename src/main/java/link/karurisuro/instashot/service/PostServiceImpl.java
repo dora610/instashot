@@ -1,7 +1,9 @@
 package link.karurisuro.instashot.service;
 
 import link.karurisuro.instashot.dao.PostRepository;
+import link.karurisuro.instashot.dao.UserRepository;
 import link.karurisuro.instashot.entities.Post;
+import link.karurisuro.instashot.entities.User;
 import link.karurisuro.instashot.error.CustomDataNotFoundException;
 import link.karurisuro.instashot.error.CustomErrorException;
 import org.slf4j.Logger;
@@ -20,6 +22,8 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository postRepo;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Post> getAllPosts() throws CustomErrorException {
@@ -38,16 +42,26 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
-    public Long savePost(Post post) {
+    public Long savePost(Post post, Long userId) throws CustomErrorException {
+        if(!userRepository.existsById(userId)){
+            throw new CustomErrorException("Author does not exists", HttpStatus.BAD_REQUEST);
+        }
+        User user = userRepository.getReferenceById(userId);
+        post.setUser(user);
         Post newPost = postRepo.save(post);
         return newPost.getId();
     }
 
     @Override
-    public Long updatePost(Post post) throws CustomDataNotFoundException {
+    public Long updatePost(Post post, Long userId) throws CustomDataNotFoundException, CustomErrorException {
         if (!postRepo.existsById(post.getId())) {
             throw new CustomDataNotFoundException("Requested post not found");
         }
+        if (!userRepository.existsById(userId)) {
+            throw new CustomErrorException("Author does not exists", HttpStatus.BAD_REQUEST);
+        }
+        User user = userRepository.getReferenceById(userId);
+        post.setUser(user);
         Post updatedPost = postRepo.save(post);
         return updatedPost.getId();
     }
