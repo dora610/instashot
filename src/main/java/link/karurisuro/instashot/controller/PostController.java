@@ -1,7 +1,7 @@
 package link.karurisuro.instashot.controller;
 
 import link.karurisuro.instashot.entities.Post;
-import link.karurisuro.instashot.error.NotFoundError;
+import link.karurisuro.instashot.error.CustomDataNotFoundException;
 import link.karurisuro.instashot.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,19 +18,19 @@ public class PostController {
     private PostService postService;
 
     @GetMapping("/")
-    public ResponseEntity<List<Post>> getAllPosts() throws NotFoundError {
+    public ResponseEntity<List<Post>> getAllPosts() throws CustomDataNotFoundException {
         List<Post> posts = postService.getAllPosts();
         if (posts.size() == 0) {
-            throw new NotFoundError("No Posts available in db!!");
+            throw new CustomDataNotFoundException("No Posts available in db!!");
         }
         return ResponseEntity.of(Optional.of(posts));
     }
 
     @GetMapping("/find")
-    public ResponseEntity<Post> getSinglePost(@RequestParam(value = "id") Long postId) throws NotFoundError {
+    public ResponseEntity<Post> getSinglePost(@RequestParam(value = "id") Long postId) throws CustomDataNotFoundException {
         Optional<Post> post = postService.getSinglePost(postId);
         if (post.isPresent()) {
-            throw new NotFoundError("Requested post not found");
+            throw new CustomDataNotFoundException("Requested post not found");
         }
         return ResponseEntity.of(post);
     }

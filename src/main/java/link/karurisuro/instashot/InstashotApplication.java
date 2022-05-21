@@ -20,8 +20,9 @@ public class InstashotApplication {
 		SpringApplication.run(InstashotApplication.class, args);
 	}
 
+	// For sample data migration
 	//	@Bean
-	public CommandLineRunner initializeDb(PostRepository repo) {
+	/*public CommandLineRunner initializeDb(PostRepository repo) {
 		return (args -> {
 			List<Post> li = new ArrayList<>();
 			li.add(new Post("pots_1", "author_1",
@@ -34,13 +35,9 @@ public class InstashotApplication {
 					"Post descriptions", "comments_4", 2));
 			li.add(new Post("pots_5", "author_2",
 					"Post descriptions", "comments_5", 25));
-
 			repo.saveAll(li);
-
-			log.info("saved posts");
 			repo.findAll().forEach(p -> log.info("post: {}", p));
-
 		});
-	}
+	}*/
 
 }
