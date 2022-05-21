@@ -12,7 +12,7 @@
     <artifactId>instashot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>instashot</name>
-    <description>Social media for travellers</description>
+    <description>Social media for travelers</description>
     <properties>
         <java.version>18</java.version>
     </properties>

@@ -1,7 +1,11 @@
 package link.karurisuro.instashot.error;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+@Setter
+@Getter
 public class CustomErrorException extends Exception {
     private HttpStatus status;
     private Object data;

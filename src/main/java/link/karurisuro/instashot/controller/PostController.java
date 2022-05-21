@@ -2,8 +2,10 @@ package link.karurisuro.instashot.controller;
 
 import link.karurisuro.instashot.entities.Post;
 import link.karurisuro.instashot.error.CustomDataNotFoundException;
+import link.karurisuro.instashot.error.CustomErrorException;
 import link.karurisuro.instashot.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,29 +19,39 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<Post>> getAllPosts() throws CustomDataNotFoundException {
+    private final String responseTempate="Successfully %s post with postId: %s";
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Post>> getAllPosts() throws CustomErrorException {
         List<Post> posts = postService.getAllPosts();
-        if (posts.size() == 0) {
-            throw new CustomDataNotFoundException("No Posts available in db!!");
-        }
         return ResponseEntity.of(Optional.of(posts));
     }
 
-    @GetMapping("/find")
+    @GetMapping("/")
     public ResponseEntity<Post> getSinglePost(@RequestParam(value = "id") Long postId) throws CustomDataNotFoundException {
-        Optional<Post> post = postService.getSinglePost(postId);
-        if (post.isPresent()) {
-            throw new CustomDataNotFoundException("Requested post not found");
-        }
-        return ResponseEntity.of(post);
+        Post post = postService.getSinglePost(postId);
+        return ResponseEntity.of(Optional.of(post));
     }
 
     @PostMapping("/")
     public ResponseEntity<String> savePost(@RequestBody Post post) {
         Long newPostId = postService.savePost(post);
-        String response = "Successfully create new post with postid: " + newPostId;
-        return ResponseEntity.of(Optional.ofNullable(response));
+        String responseMessage = String.format(responseTempate, "created", newPostId);
+        return ResponseEntity.of(Optional.of(responseMessage));
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<String> updatePost(@RequestBody Post post) throws CustomDataNotFoundException {
+        Long updatedPostId = postService.updatePost(post);
+        String responseMessage = String.format(responseTempate, "updated", updatedPostId);
+        return ResponseEntity.of(Optional.of(responseMessage));
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity<String> deletePost(@RequestParam("id") Long postId) throws CustomDataNotFoundException {
+        postService.deletePost(postId);
+        String responseMessage = String.format(responseTempate, "deleted", postId);
+        return ResponseEntity.of(Optional.of(responseMessage));
     }
 
 }

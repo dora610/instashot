@@ -1,14 +1,19 @@
 package link.karurisuro.instashot.service;
 
 import link.karurisuro.instashot.entities.Post;
+import link.karurisuro.instashot.error.CustomDataNotFoundException;
+import link.karurisuro.instashot.error.CustomErrorException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PostService {
-    List<Post> getAllPosts();
+    List<Post> getAllPosts() throws CustomErrorException;
 
-    Optional<Post> getSinglePost(Long id);
+    Post getSinglePost(Long id) throws CustomDataNotFoundException;
 
     Long savePost(Post post);
+
+    Long updatePost(Post post) throws CustomDataNotFoundException;
+
+    void deletePost(Long postID) throws CustomDataNotFoundException;
 }
