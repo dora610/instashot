@@ -26,7 +26,6 @@ public class CustomErrorHandler {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus), httpStatus);
     }
 
-
     @ExceptionHandler(value = CustomParameterConstraintException.class)
     public ResponseEntity<ErrorResponse> handleCustomParameterConstraintException(CustomParameterConstraintException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
@@ -34,7 +33,6 @@ public class CustomErrorHandler {
         e.printStackTrace();
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus), httpStatus);
     }
-
 
     @ExceptionHandler(value = CustomErrorException.class)
     public ResponseEntity<ErrorResponse> handleCustomErrorException(CustomErrorException e) {
@@ -54,7 +52,7 @@ public class CustomErrorHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
         // converting stack trace to string
         StringWriter stringWriter = new StringWriter();
