@@ -1,12 +1,14 @@
 package link.karurisuro.instashot.controller;
 
+import link.karurisuro.instashot.entities.Comment;
 import link.karurisuro.instashot.entities.Post;
+import link.karurisuro.instashot.entities.User;
 import link.karurisuro.instashot.error.CustomDataNotFoundException;
 import link.karurisuro.instashot.error.CustomErrorException;
 import link.karurisuro.instashot.model.PostDto;
 import link.karurisuro.instashot.service.PostService;
-import link.karurisuro.instashot.utils.MapFromPostDto;
-import link.karurisuro.instashot.utils.MapToPostDto;
+import link.karurisuro.instashot.utils.MapFromDto;
+import link.karurisuro.instashot.utils.MapToDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,7 @@ public class PostController {
         List<PostDto> postRespList =
                 postService.getAllPosts()
                         .stream()
-                        .map(MapToPostDto::mapper)
+                        .map(MapToDto::postMapper)
                         .collect(Collectors.toList());
         return ResponseEntity.of(Optional.of(postRespList));
     }
@@ -37,24 +39,23 @@ public class PostController {
     @GetMapping("/")
     public ResponseEntity<PostDto> getSinglePost(@RequestParam(value = "id") Long postId) throws CustomDataNotFoundException {
         Post post = postService.getSinglePost(postId);
-        PostDto postResp = MapToPostDto.mapper(post);
+        PostDto postResp = MapToDto.postMapper(post);
         return ResponseEntity.of(Optional.of(postResp));
     }
 
     @PostMapping("/")
     public ResponseEntity<String> savePost(@RequestBody PostDto postDto) throws CustomErrorException {
-        Post post = MapFromPostDto.mapper(postDto);
-        Long newPostId = postService.savePost(post, postDto.getAuthorId());
+        Post post = MapFromDto.postMapper(postDto);
+        Long newPostId = postService.savePost(post);
         String responseMessage = String.format(responseTemplate, "created", newPostId);
         return ResponseEntity.of(Optional.of(responseMessage));
     }
 
     @PutMapping("/")
     public ResponseEntity<String> updatePost(@RequestBody PostDto postDto) throws CustomDataNotFoundException, CustomErrorException {
-        Post post = MapFromPostDto.mapper(postDto);
-        post.setId(postDto.getId());
+        Post post = MapFromDto.postMapper(postDto);
         // validate if the author is editing post or not
-        Long updatedPostId = postService.updatePost(post, postDto.getAuthorId());
+        Long updatedPostId = postService.updatePost(post);
         String responseMessage = String.format(responseTemplate, "updated", updatedPostId);
         return ResponseEntity.of(Optional.of(responseMessage));
     }

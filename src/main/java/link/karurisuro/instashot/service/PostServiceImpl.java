@@ -2,6 +2,7 @@ package link.karurisuro.instashot.service;
 
 import link.karurisuro.instashot.dao.PostRepository;
 import link.karurisuro.instashot.dao.UserRepository;
+import link.karurisuro.instashot.entities.Comment;
 import link.karurisuro.instashot.entities.Post;
 import link.karurisuro.instashot.entities.User;
 import link.karurisuro.instashot.error.CustomDataNotFoundException;
@@ -29,7 +30,7 @@ public class PostServiceImpl implements PostService {
     public List<Post> getAllPosts() throws CustomErrorException {
         List<Post> posts = postRepo.findAll();
         if (posts.size() == 0) {
-            throw new CustomErrorException("No post is presnt in db!!", HttpStatus.NOT_FOUND);
+            throw new CustomErrorException("No post is present in db!!", HttpStatus.NOT_FOUND);
         }
         log.debug("posts fetched from db: {}", posts);
         return posts;
@@ -42,25 +43,24 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
-    public Long savePost(Post post, Long userId) throws CustomErrorException {
-        if(!userRepository.existsById(userId)){
+    public Long savePost(Post post) throws CustomErrorException {
+        if (!userRepository.existsById(post.getUser().getId())) {
             throw new CustomErrorException("Author does not exists", HttpStatus.BAD_REQUEST);
         }
-        User user = userRepository.getReferenceById(userId);
-        post.setUser(user);
+        log.debug("post: {}", post);
         Post newPost = postRepo.save(post);
         return newPost.getId();
     }
 
     @Override
-    public Long updatePost(Post post, Long userId) throws CustomDataNotFoundException, CustomErrorException {
+    public Long updatePost(Post post) throws CustomDataNotFoundException, CustomErrorException {
         if (!postRepo.existsById(post.getId())) {
             throw new CustomDataNotFoundException("Requested post not found");
         }
-        if (!userRepository.existsById(userId)) {
+        if (!userRepository.existsById(post.getUser().getId())) {
             throw new CustomErrorException("Author does not exists", HttpStatus.BAD_REQUEST);
         }
-        User user = userRepository.getReferenceById(userId);
+        User user = userRepository.getReferenceById(post.getUser().getId());
         post.setUser(user);
         Post updatedPost = postRepo.save(post);
         return updatedPost.getId();

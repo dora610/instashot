@@ -4,15 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,8 +22,9 @@ public class Post {
     @Column(nullable = false)
     private String title;
     private String body;
-    // TODO: change it to list of comments
-    private String comments;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    private List<Comment> comments;
+    @ColumnDefault("0")
     private Integer likes;
 //    @CreatedDate
 //    private LocalDateTime createdDateTime;
@@ -30,22 +32,22 @@ public class Post {
     @JoinColumn(name = "author_id")
     private User user;
 
-    public Post(String title, String body, String comments, Integer likes) {
+    /*public Post(String title, String body, List<Comment> comments, Integer likes) {
         this.title = title;
         this.body = body;
         this.comments = comments;
         this.likes = likes;
+    }*/
+
+    public Post(String title, String body, Integer likes) {
+        this.title = title;
+        this.body = body;
+        this.likes = likes;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", body='" + body + '\'' +
-                ", comments='" + comments + '\'' +
-                ", likes=" + likes +
-                ", userName=" + user.getName() +
-                '}';
+    public Post(String title, String body, User user) {
+        this.title = title;
+        this.body = body;
+        this.user = user;
     }
 }

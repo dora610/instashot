@@ -1,7 +1,10 @@
 package link.karurisuro.instashot.model;
 
 
+import link.karurisuro.instashot.entities.Comment;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,8 +15,14 @@ public class PostDto {
     private Long id;
     private String title;
     private String body;
-    private String comments;
+    private UserDto author;
     private Integer likes;
-    private String authorName;
-    private Long authorId;
+    private List<CommentDto> comments;
+
+    public PostDto(Long id, String title, String body, Integer likes) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.likes = likes;
+    }
 }
