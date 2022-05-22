@@ -30,8 +30,8 @@ public class InstashotApplication {
     @Bean
     public CommandLineRunner initializeDb(PostRepository postRepo, UserRepository userRepo, CommentRepository commentRepo) {
         return (args -> {
-            User user1 = new User("Kiara", "kiara@kiara.com", "It's Kiara", "kiara@123", "normal user");
-            User user2 = new User("Binod", "binod@binod.com", "It's Binod", "binod@123", "normal user");
+            User user1 = new User("Kiara", "kiara@kiara.com", "It's Kiara", "kiara@123", "kiara01", "ROLE_USER");
+            User user2 = new User("Binod", "binod@binod.com", "It's Binod", "binod@123", "binod01", "ROLE_USER");
 
             Post p1 = new Post("post1","Lorem, ipsum dolor sit amet", user1);
             Post p2 = new Post("post2","Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa, quisquam.", user1);

@@ -3,6 +3,7 @@ package link.karurisuro.instashot.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,28 +23,19 @@ public class User {
     private String email;
     private String bio;
     private String password;
-    private String role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
+    private String userName;
+    private Boolean enabled;
+    private String roles;
 
-    public User(String name, String email, String bio, String password, String role) {
+    public User(String name, String email, String bio, String password, String userName, String roles) {
         this.name = name;
         this.email = email;
         this.bio = bio;
         this.password = password;
-        this.role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", bio='" + bio + '\'' +
-                ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
-                ", posts=" + posts +
-                '}';
+        this.userName = userName;
+        this.roles = roles;
+        this.enabled = true;
     }
 }
