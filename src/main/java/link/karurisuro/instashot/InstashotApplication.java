@@ -1,21 +1,9 @@
 package link.karurisuro.instashot;
 
-import link.karurisuro.instashot.dao.CommentRepository;
-import link.karurisuro.instashot.dao.PostRepository;
-import link.karurisuro.instashot.dao.UserRepository;
-import link.karurisuro.instashot.entities.Comment;
-import link.karurisuro.instashot.entities.Post;
-import link.karurisuro.instashot.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class InstashotApplication {
@@ -27,7 +15,7 @@ public class InstashotApplication {
     }
 
     // For sample data migration
-    @Bean
+   /* @Bean
     public CommandLineRunner initializeDb(PostRepository postRepo, UserRepository userRepo, CommentRepository commentRepo) {
         return (args -> {
             User user1 = new User("Kiara", "kiara@kiara.com", "It's Kiara", "kiara@123", "kiara01", "ROLE_USER");
@@ -53,6 +41,6 @@ public class InstashotApplication {
 //            postRepo.findAll().forEach(p -> log.info("post: {}", p));
 //            commentRepo.findAll().forEach(c -> log.info("comment: {}", c));
         });
-    }
+    }*/
 
 }
