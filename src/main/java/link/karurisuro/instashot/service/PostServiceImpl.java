@@ -2,7 +2,6 @@ package link.karurisuro.instashot.service;
 
 import link.karurisuro.instashot.dao.PostRepository;
 import link.karurisuro.instashot.dao.UserRepository;
-import link.karurisuro.instashot.entities.Comment;
 import link.karurisuro.instashot.entities.Post;
 import link.karurisuro.instashot.entities.User;
 import link.karurisuro.instashot.error.CustomDataNotFoundException;
@@ -44,16 +43,17 @@ public class PostServiceImpl implements PostService {
     }
 
     public Long savePost(Post post) throws CustomErrorException {
+        log.debug("post: {}", post);
         if (!userRepository.existsById(post.getUser().getId())) {
             throw new CustomErrorException("Author does not exists", HttpStatus.BAD_REQUEST);
         }
-        log.debug("post: {}", post);
         Post newPost = postRepo.save(post);
         return newPost.getId();
     }
 
     @Override
     public Long updatePost(Post post) throws CustomDataNotFoundException, CustomErrorException {
+        log.debug("post : {}", post);
         if (!postRepo.existsById(post.getId())) {
             throw new CustomDataNotFoundException("Requested post not found");
         }
@@ -68,6 +68,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(Long postId) throws CustomDataNotFoundException {
+        log.debug("PostId: {}", postId);
         if (!postRepo.existsById(postId)) {
             throw new CustomDataNotFoundException("Requested post not found");
         }

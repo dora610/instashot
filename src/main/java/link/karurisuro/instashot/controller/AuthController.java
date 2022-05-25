@@ -3,6 +3,8 @@ package link.karurisuro.instashot.controller;
 import link.karurisuro.instashot.model.AuthenticationRequest;
 import link.karurisuro.instashot.model.AuthenticationResponse;
 import link.karurisuro.instashot.utils.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -38,6 +42,8 @@ public class AuthController {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        logger.debug("UserDetails: {}", userDetails);
+
         String jwt = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));

@@ -1,6 +1,8 @@
 package link.karurisuro.instashot.filters;
 
 import link.karurisuro.instashot.utils.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,8 @@ import java.io.IOException;
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JWTRequestFilter.class);
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -36,6 +40,8 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             username = jwtUtil.extractUsername(jwt);
         }
+
+        logger.debug(username);
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
