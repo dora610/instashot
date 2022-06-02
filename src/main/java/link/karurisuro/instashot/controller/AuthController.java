@@ -1,5 +1,6 @@
 package link.karurisuro.instashot.controller;
 
+import link.karurisuro.instashot.error.InvalidUserNamePasswordException;
 import link.karurisuro.instashot.model.AuthenticationRequest;
 import link.karurisuro.instashot.model.AuthenticationResponse;
 import link.karurisuro.instashot.utils.JwtUtil;
@@ -38,7 +39,7 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
         }catch (BadCredentialsException e ){
-            throw new Exception("Incorrect username or password", e);
+            throw new InvalidUserNamePasswordException("Incorrect username or password");
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());

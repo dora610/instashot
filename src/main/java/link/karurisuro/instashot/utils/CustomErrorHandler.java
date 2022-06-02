@@ -3,6 +3,7 @@ package link.karurisuro.instashot.utils;
 import link.karurisuro.instashot.error.CustomDataNotFoundException;
 import link.karurisuro.instashot.error.CustomErrorException;
 import link.karurisuro.instashot.error.CustomParameterConstraintException;
+import link.karurisuro.instashot.error.InvalidUserNamePasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,12 @@ public class CustomErrorHandler {
         HttpStatus httpStatus = e.getStatus();
         log.error(e.getMessage());
         e.printStackTrace();
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus), httpStatus);
+    }
+
+    @ExceptionHandler(value = InvalidUserNamePasswordException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidUserNamePasswordException(InvalidUserNamePasswordException e) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), httpStatus), httpStatus);
     }
 
